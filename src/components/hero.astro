@@ -3,6 +3,8 @@ import { Picture } from "astro:assets";
 import heroImage from "assets/hero.png";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
+
+const { title, subtitle, ctaText, secondaryCtaText } = Astro.props;
 ---
 
 <main
@@ -20,10 +22,10 @@ import { Icon } from "astro-icon/components";
   <div>
     <h1
       class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
-      Find the Perfect Guide for Every Journey.
+      {title}
     </h1>
     <p class="text-lg mt-4 text-slate-600 max-w-xl">
-      Connecting travel companies with expert freelance guides worldwide.
+      {subtitle}
     </p>
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
       <Link
@@ -32,8 +34,8 @@ import { Icon } from "astro-icon/components";
         target="_blank"
         class="flex gap-1 items-center justify-center"
         rel="noopener">
+        {ctaText}
         <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
-        Get Started Today
       </Link>
       <Link
         size="lg"
@@ -42,8 +44,7 @@ import { Icon } from "astro-icon/components";
         href="https://github.com/surjithctly/guidescout"
         class="flex gap-1 items-center justify-center"
         target="_blank">
-        <Icon class="text-black w-4 h-4" name="bx:bxs-contact" />
-        Contact Sales
+        {secondaryCtaText}
       </Link>
     </div>
   </div>

@@ -9,9 +9,55 @@ import Layout from "@layouts/Layout.astro";
 
 <Layout title="">
   <Container>
-    <Hero />
-    <Features />
+    <Hero
+      title="Get Discovered. Earn More. Guide Your Way."
+      subtitle="Join GuideScout and connect with top travel companies seeking expert guides like you."
+      ctaText="Sign Up Now – It’s Free"
+      secondaryCtaText="Learn How It Works"
+    />
+    <Features
+      title="Why GuideScout is Perfect for You"
+      subtitle="Unlock new opportunities, grow your reputation, and earn more—all on your terms."
+      features={[
+        {
+          title: "Access More Opportunities",
+          description:
+            "Connect with a global network of travel companies looking for guides in your area of expertise.",
+          icon: "bx:bxs-user-check",
+        },
+        {
+          title: "Flexible Work, Your Way",
+          description:
+            "Choose when, where, and how you want to work. No commitments—just opportunities",
+          icon: "bx:bxs-user-check",
+        },
+        {
+          title: "Secure Payments",
+          description:
+            "Get paid on time, every time, with transparent earnings and no hidden fees.",
+          icon: "bx:bxs-user-check",
+        },
+        {
+          title: "Showcase Your Expertise",
+          description:
+            "Create a standout profile with photos, reviews, and certifications.",
+          icon: "bx:bxs-user-check",
+        },
+        {
+          title: "Expand Your Reach",
+          description:
+            "Be seen by companies looking for guides in your area, whether you're in a bustling city or a hidden gem.",
+          icon: "bx:bxs-user-check",
+        },
+        {
+          title: "Supportive Community",
+          description:
+            "Join a network of like-minded guides to share experiences, tips, and resources to grow your career.",
+          icon: "bx:bxs-user-check",
+        },
+      ]}
+    />
     <!-- <Logos /> -->
-    <Cta />
+    <!-- <Cta /> -->
   </Container>
 </Layout>
