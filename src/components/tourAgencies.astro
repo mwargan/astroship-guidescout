@@ -1,11 +1,11 @@
 ---
 interface Props {
-  city: string;
+  place: string;
 }
 
-export const getData = async (city: string): Promise<string[]> => {
+export const getData = async (place: string): Promise<string[]> => {
   const base_url = `https://guidescout.net`;
-  const full_url = `${base_url}/api/tourAgencies?city=${city}`;
+  const full_url = `${base_url}/api/tourAgencies?place=${place}`;
 
   try {
     const response = await fetch(full_url);
@@ -25,10 +25,10 @@ export const getData = async (city: string): Promise<string[]> => {
   }
 };
 
-const { city } = Astro.props;
+const { place } = Astro.props;
 
 // Fetch the data at build or request time
-const agencies = await getData(city);
+const agencies = await getData(place);
 ---
 
 <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
@@ -40,7 +40,7 @@ const agencies = await getData(city);
         </div>
       ))
     ) : (
-      <p class="text-slate-500">No agencies found for this city.</p>
+      <p class="text-slate-500">No agencies found for this place.</p>
     )
   }
 </div>

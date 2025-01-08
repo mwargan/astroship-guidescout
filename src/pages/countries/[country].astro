@@ -6,22 +6,22 @@ import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
 import TourAgencies from "@components/tourAgencies.astro";
 
-const { city } = Astro.params;
+const { country } = Astro.params;
 
-const titleCaseCity = city.charAt(0).toUpperCase() + city.slice(1);
+const titleCaseCountry = country.charAt(0).toUpperCase() + country.slice(1);
 ---
 
-<Layout title={`Guide your way in ${titleCaseCity}`}>
+<Layout title={`Guide your way in ${titleCaseCountry}`}>
   <Container>
     <Hero
-      title={`Guide your way in ${titleCaseCity}.`}
-      subtitle={`Get gigs from local tour companies in ${titleCaseCity}. You choose the jobs you want, the hours you want, and what you want to do.`}
+      title={`Guide your way in ${titleCaseCountry}.`}
+      subtitle={`Get gigs from local tour companies in ${titleCaseCountry}. You choose the jobs you want, the hours you want, and what you want to do.`}
       ctaText="Sign Up Now – It’s Free"
       secondaryCtaText="Learn How It Works"
     />
     <h2 class="text-center text-slate-500">
       Work with the best agencies around
     </h2>
-    <TourAgencies place={city} />
+    <TourAgencies place={country} />
   </Container>
 </Layout>

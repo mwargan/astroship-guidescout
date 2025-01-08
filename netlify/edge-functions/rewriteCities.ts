@@ -1,5 +1,11 @@
 export default async (request, context) => {
-  const path = "/cities/" + context.geo?.city?.name.toLowerCase();
+  const cityName = context.geo?.city?.name?.toLowerCase();
+  const countryName = context.geo?.country?.name?.toLowerCase();
+  const path = cityName
+    ? `/cities/${cityName}`
+    : countryName
+      ? `/countries/${countryName}`
+      : "/";
   return Response.redirect(new URL(path, request.url));
 };
 

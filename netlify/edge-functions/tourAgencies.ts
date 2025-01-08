@@ -1,7 +1,8 @@
 export default async (request, context) => {
   const geocodeArea =
-    context.url.searchParams.get("city") ||
+    context.url.searchParams.get("place") ||
     context.geo?.city?.name ||
+    context.geo?.country?.name ||
     "Rovaniemi"; // Default to "Rovaniemi" if not provided
 
   const geocodeAreaFirstLetterCapitalized =
@@ -27,7 +28,7 @@ export default async (request, context) => {
   }).then((data) => data.json());
 
   return Response.json({
-    city: geocodeAreaFirstLetterCapitalized,
+    place: geocodeAreaFirstLetterCapitalized,
     results: result?.elements,
   });
 };
