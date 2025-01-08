@@ -1,14 +1,26 @@
 ---
-export const prerender = false;
+import { Country as CN, City } from "country-state-city";
 
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
-import TourAgencies from "@components/tourAgencies.astro";
 
 const { country } = Astro.params;
 
 const titleCaseCountry = country.charAt(0).toUpperCase() + country.slice(1);
+
+const activeCountry = CN?.getAllCountries().find(
+  (c) => c.name === titleCaseCountry
+);
+
+const countryCode = activeCountry?.isoCode;
+const flag = activeCountry?.flag;
+
+const cities = City?.getCitiesOfCountry(countryCode).sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
+
+const uniqueCities = Array.from(new Set(cities.map((city) => city.name)));
 ---
 
 <Layout title={`Guide your way in ${titleCaseCountry}`}>
@@ -19,9 +31,17 @@ const titleCaseCountry = country.charAt(0).toUpperCase() + country.slice(1);
       ctaText="Sign Up Now – It’s Free"
       secondaryCtaText="Learn How It Works"
     />
-    <h2 class="text-center text-slate-500">
-      Work with the best agencies around
-    </h2>
-    <TourAgencies place={country} />
+    <h2 class="text-center text-slate-500">Guide your {flag} city</h2>
+
+    <!-- List all cities -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        uniqueCities.map((city: string) => (
+          <li class="p-4 bg-white shadow rounded-lg">
+            <a href={`/cities/${city.toLowerCase()}`}>{city}</a>
+          </li>
+        ))
+      }
+    </ul>
   </Container>
 </Layout>

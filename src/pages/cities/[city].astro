@@ -1,6 +1,4 @@
 ---
-export const prerender = false;
-
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
@@ -20,8 +18,8 @@ const titleCaseCity = city.charAt(0).toUpperCase() + city.slice(1);
       secondaryCtaText="Learn How It Works"
     />
     <h2 class="text-center text-slate-500">
-      Work with the best agencies around
+      Work with the best agencies around {titleCaseCity}
     </h2>
-    <TourAgencies place={city} />
+    <TourAgencies place={titleCaseCity} />
   </Container>
 </Layout>

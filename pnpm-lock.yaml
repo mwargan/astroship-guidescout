@@ -53,6 +53,9 @@ importers:
       astro-seo:
         specifier: ^0.8.3
         version: 0.8.3(typescript@5.4.5)
+      country-state-city:
+        specifier: ^3.2.1
+        version: 3.2.1
       sharp:
         specifier: ^0.33.4
         version: 0.33.4
@@ -1162,6 +1165,9 @@ packages:
   cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
+
+  country-state-city@3.2.1:
+    resolution: {integrity: sha512-kxbanqMc6izjhc/EHkGPCTabSPZ2G6eG4/97akAYHJUN4stzzFEvQPZoF8oXDQ+10gM/O/yUmISCR1ZVxyb6EA==}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -4025,6 +4031,8 @@ snapshots:
   cookie-es@1.2.2: {}
 
   cookie@0.7.2: {}
+
+  country-state-city@3.2.1: {}
 
   cross-spawn@7.0.3:
     dependencies:
