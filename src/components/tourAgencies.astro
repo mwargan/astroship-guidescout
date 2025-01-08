@@ -4,7 +4,7 @@ interface Props {
 }
 
 export const getData = async (city: string): Promise<string[]> => {
-  const base_url = `http://localhost:8888`;
+  const base_url = `https://guidescout.net`;
   const full_url = `${base_url}/api/tourAgencies?city=${city}`;
 
   try {
