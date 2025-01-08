@@ -8,14 +8,9 @@ import Hero from "@components/hero.astro";
 const allCountries = CN?.getAllCountries();
 
 export function getStaticPaths() {
-  const paths = allCountries.map((country) => ({
+  return allCountries.map((country) => ({
     params: { country: country.name.toLowerCase() },
   }));
-
-  return {
-    paths,
-    fallback: false,
-  };
 }
 
 const { country } = Astro.params;
