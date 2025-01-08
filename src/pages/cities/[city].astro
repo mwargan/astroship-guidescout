@@ -1,0 +1,27 @@
+---
+export const prerender = false;
+
+import Container from "@components/container.astro";
+import Layout from "@layouts/Layout.astro";
+import Hero from "@components/hero.astro";
+import TourAgencies from "@components/tourAgencies.astro";
+
+const { city } = Astro.params;
+
+const titleCaseCity = city.charAt(0).toUpperCase() + city.slice(1);
+---
+
+<Layout title={`Guide your way in ${titleCaseCity}`}>
+  <Container>
+    <Hero
+      title={`Guide your way in ${titleCaseCity}.`}
+      subtitle={`Get gigs from local tour companies in ${titleCaseCity}. You choose the jobs you want, the hours you want, and what you want to do.`}
+      ctaText="Sign Up Now – It’s Free"
+      secondaryCtaText="Learn How It Works"
+    />
+    <h2 class="text-center text-slate-500">
+      Work with the best agencies around
+    </h2>
+    <TourAgencies city={city} />
+  </Container>
+</Layout>

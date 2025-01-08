@@ -1,0 +1,46 @@
+---
+interface Props {
+  city: string;
+}
+
+export const getData = async (city: string): Promise<string[]> => {
+  const base_url = `http://localhost:8888`;
+  const full_url = `${base_url}/api/tourAgencies?city=${city}`;
+
+  try {
+    const response = await fetch(full_url);
+    const agencies = await response.json();
+
+    // Create a set to remove duplicates by name
+    const uniqueAgencies = new Set(
+      agencies?.results?.map(
+        (agency) => agency.tags["name:en"] ?? agency.tags.name
+      )
+    );
+
+    return Array.from(uniqueAgencies) as string[];
+  } catch (error) {
+    console.error("Failed to fetch agencies:", error);
+    return [];
+  }
+};
+
+const { city } = Astro.props;
+
+// Fetch the data at build or request time
+const agencies = await getData(city);
+---
+
+<div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
+  {
+    agencies?.length > 0 ? (
+      agencies.map((agency) => (
+        <div class="gap-4 items-start">
+          <h3 class="text-xl font-bold">{agency}</h3>
+        </div>
+      ))
+    ) : (
+      <p class="text-slate-500">No agencies found for this city.</p>
+    )
+  }
+</div>
