@@ -5,10 +5,8 @@ import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
 
-const allCountries = CN?.getAllCountries();
-
 export function getStaticPaths() {
-  return allCountries.map((country) => ({
+  return CN?.getAllCountries().map((country) => ({
     params: { country: country.name.toLowerCase() },
   }));
 }
@@ -16,6 +14,8 @@ export function getStaticPaths() {
 const { country } = Astro.params;
 
 const titleCaseCountry = country.charAt(0).toUpperCase() + country.slice(1);
+
+const allCountries = CN?.getAllCountries();
 
 const activeCountry = allCountries.find((c) => c.name === titleCaseCountry);
 
