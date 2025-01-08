@@ -4,6 +4,17 @@ import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
 import TourAgencies from "@components/tourAgencies.astro";
 
+import { City as CN } from "country-state-city";
+
+export function getStaticPaths() {
+  return {
+    paths: CN?.getAllCities().map((city) => ({
+      params: { city: city.name.toLowerCase() },
+    })),
+    fallback: true,
+  };
+}
+
 const { city } = Astro.params;
 
 const titleCaseCity = city.charAt(0).toUpperCase() + city.slice(1);
