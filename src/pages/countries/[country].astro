@@ -17,7 +17,9 @@ const titleCaseCountry = country.charAt(0).toUpperCase() + country.slice(1);
 
 const allCountries = CN?.getAllCountries();
 
-const activeCountry = allCountries.find((c) => c.name === titleCaseCountry);
+const activeCountry = allCountries.find(
+  (c) => c.name.toLowerCase() === country.toLowerCase()
+);
 
 const countryCode = activeCountry?.isoCode;
 const flag = activeCountry?.flag;
