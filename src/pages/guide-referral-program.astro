@@ -2,8 +2,11 @@
 import Container from "@components/container.astro";
 import Hero from "@components/hero.astro";
 import Layout from "@layouts/Layout.astro";
+import Button from "@components/ui/button.astro";
 
-const referralCode = Math.random().toString(36).substring(7);
+let referralCode = "";
+
+const url = Astro.url.origin;
 ---
 
 <Layout title="">
@@ -11,7 +14,55 @@ const referralCode = Math.random().toString(36).substring(7);
     <Hero
       title="Earn €15 for each guide you refer who completes their first booking."
       subtitle="Share your unique referral link with friends and earn €15 for each guide who completes their first booking on GuideScout."
-      ctaText="Get Your Referral Link"
-    />
+      ctaText="Get Your Referral Link">
+      <input
+        id="referral-link"
+        type="text"
+        data-base-url={url}
+        value={`${url}/sign-up?referral=${referralCode}`}
+        class="w-full p-4 text-sm text-center bg-slate-100 text-slate-500 rounded-md"
+        readonly
+      />
+      <Button id="copy-btn" class="w-full" variant="primary" size="lg"
+        >Copy Link</Button
+      >
+    </Hero>
   </Container>
 </Layout>
+
+<script>
+  // Function to generate a unique referral code
+  function generateReferralCode() {
+    return Math.random().toString(36).substring(2, 10).toUpperCase();
+  }
+
+  // Manage referral code on the client-side
+  document.addEventListener("DOMContentLoaded", () => {
+    // Retrieve or generate the referral code
+    let referralCode = localStorage.getItem("referralCode");
+    if (!referralCode) {
+      referralCode = generateReferralCode();
+      localStorage.setItem("referralCode", referralCode);
+    }
+
+    // Update the referral link input field
+    const referralLinkInput = document.getElementById(
+      "referral-link"
+    ) as HTMLInputElement;
+    const url = referralLinkInput.dataset.baseUrl;
+    referralLinkInput.value = `${url}/sign-up?referral=${referralCode}`;
+
+    // Add copy-to-clipboard functionality
+    const copyButton = document.getElementById("copy-btn") as HTMLButtonElement;
+    copyButton.addEventListener("click", () => {
+      referralLinkInput.select();
+      referralLinkInput.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand("copy");
+      // Change the button text to "Copied!" for 2 seconds
+      copyButton.textContent = "Copied!";
+      setTimeout(() => {
+        copyButton.textContent = "Copy Link";
+      }, 2000);
+    });
+  });
+</script>

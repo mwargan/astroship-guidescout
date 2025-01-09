@@ -28,26 +28,28 @@ const { title, subtitle, ctaText, secondaryCtaText = false } = Astro.props;
       {subtitle}
     </p>
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
-      <Link
-        href="#"
-        href="/sign-up"
-        class="flex gap-1 items-center justify-center"
-        rel="noopener">
-        {ctaText}
-        <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
-      </Link>
-      {
-        secondaryCtaText && (
-          <Link
-            size="lg"
-            style="outline"
-            rel="noopener"
-            href="/about"
-            class="flex gap-1 items-center justify-center">
-            {secondaryCtaText}
-          </Link>
-        )
-      }
+      <slot>
+        <Link
+          href="#"
+          href="/sign-up"
+          class="flex gap-1 items-center justify-center"
+          rel="noopener">
+          {ctaText}
+          <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
+        </Link>
+        {
+          secondaryCtaText && (
+            <Link
+              size="lg"
+              style="outline"
+              rel="noopener"
+              href="/about"
+              class="flex gap-1 items-center justify-center">
+              {secondaryCtaText}
+            </Link>
+          )
+        }
+      </slot>
     </div>
   </div>
 </main>

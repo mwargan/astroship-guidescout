@@ -24,6 +24,8 @@ import Button from "@components/ui/button.astro";
       style="display:none"
       name="botcheck"
     />
+    <!-- Referral code input field -->
+    <input id="referral" type="hidden" name="referral" />
     <div class="mb-4">
       <label for="name">First Name</label>
       <input
@@ -97,51 +99,21 @@ import Button from "@components/ui/button.astro";
 </style>
 
 <script is:inline>
-  const form = document.getElementById("form");
+  const form = document.getElementById("sign-up");
   const result = document.getElementById("result");
 
+  // Get the referrer code from the URL if it exists
+  const urlParams = new URLSearchParams(window.location.search);
+  const referralCode = urlParams.get("referral");
+
+  // Set the referral code in the hidden input field
+  document.getElementById("referral").value = referralCode;
+
   form.addEventListener("submit", function (e) {
-    e.preventDefault();
     form.classList.add("was-validated");
     if (!form.checkValidity()) {
       form.querySelectorAll(":invalid")[0].focus();
       return;
     }
-    const formData = new FormData(form);
-    const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
-
-    result.innerHTML = "Sending...";
-
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: json,
-    })
-      .then(async (response) => {
-        let json = await response.json();
-        if (response.status == 200) {
-          result.classList.add("text-green-500");
-          result.innerHTML = json.message;
-        } else {
-          console.log(response);
-          result.classList.add("text-red-500");
-          result.innerHTML = json.message;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        result.innerHTML = "Something went wrong!";
-      })
-      .then(function () {
-        form.reset();
-        form.classList.remove("was-validated");
-        setTimeout(() => {
-          result.style.display = "none";
-        }, 5000);
-      });
   });
 </script>
