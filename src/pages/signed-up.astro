@@ -1,0 +1,100 @@
+---
+import Container from "@components/container.astro";
+import Features from "@components/features.astro";
+import Hero from "@components/hero.astro";
+import Testimonial from "@components/testimonial.astro";
+import Layout from "@layouts/Layout.astro";
+import BentoFeatures from "@components/bentoFeatures.astro";
+import FullpageLayout from "@layouts/FullpageLayout.astro";
+import BlogLayout from "@layouts/BlogLayout.astro";
+import Button from "@components/ui/button.astro";
+---
+
+<FullpageLayout title="Welcome to GuideScout." subtitle="Congratulations!">
+  <!-- No index meta tag in head slot -->
+  <meta name="robots" content="noindex" slot="head" />
+
+  <p>Your profile is setup and almost ready to go.</p>
+  <ul>
+    <li>
+      Your profile is being verified, which can take 1-3 days. Additional
+      information may be requested. You will be notified when it’s done.
+    </li>
+    <li>
+      You can increase your success rate by adding photos to your profile.
+    </li>
+  </ul>
+  <Button slot="footer" type="submit" form="sign-up">
+    Refer a friend and earn €5!
+  </Button>
+</FullpageLayout>
+
+<style>
+  .invalid-feedback,
+  .empty-feedback {
+    display: none;
+  }
+
+  .was-validated :placeholder-shown:invalid ~ .empty-feedback {
+    display: block;
+  }
+
+  .was-validated :not(:placeholder-shown):invalid ~ .invalid-feedback {
+    display: block;
+  }
+
+  .is-invalid,
+  .was-validated :invalid {
+    border-color: #dc3545;
+  }
+</style>
+
+<script is:inline>
+  const form = document.getElementById("form");
+  const result = document.getElementById("result");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    form.classList.add("was-validated");
+    if (!form.checkValidity()) {
+      form.querySelectorAll(":invalid")[0].focus();
+      return;
+    }
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    result.innerHTML = "Sending...";
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: json,
+    })
+      .then(async (response) => {
+        let json = await response.json();
+        if (response.status == 200) {
+          result.classList.add("text-green-500");
+          result.innerHTML = json.message;
+        } else {
+          console.log(response);
+          result.classList.add("text-red-500");
+          result.innerHTML = json.message;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        result.innerHTML = "Something went wrong!";
+      })
+      .then(function () {
+        form.reset();
+        form.classList.remove("was-validated");
+        setTimeout(() => {
+          result.style.display = "none";
+        }, 5000);
+      });
+  });
+</script>

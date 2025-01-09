@@ -7,6 +7,7 @@ import "@fontsource-variable/bricolage-grotesque";
 
 export interface Props {
   title: string;
+  showNav?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
@@ -16,11 +17,11 @@ const resolvedImageWithDomain = new URL(
   Astro.site
 ).toString();
 
-const { title } = Astro.props;
+const { title, showNav = true } = Astro.props;
 
 const makeTitle = title
   ? title + " | " + "GuideScout"
-  : "GuideScout - Starter Template for Astro with Tailwind CSS";
+  : "GuideScout - connecting freelance guides and tour companies";
 ---
 
 <!doctype html>
@@ -34,7 +35,7 @@ const makeTitle = title
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
       title={makeTitle}
-      description="GuideScout is a starter website template for Astro built with TailwindCSS."
+      description="GuideScout connects freelance guides and tour companies. Get gigs from local tour companies in your city. You choose the jobs you want, the hours you want, and what you want to do."
       canonical={canonicalURL}
       twitter={{
         creator: "@surjithctly",
@@ -45,7 +46,7 @@ const makeTitle = title
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `GuideScout - Starter Template for Astro`,
+          title: `GuideScout - connecting freelance guides and tour companies`,
           image: resolvedImageWithDomain,
         },
         image: {
@@ -53,9 +54,11 @@ const makeTitle = title
         },
       }}
     />
+
+    <slot name="head" />
   </head>
   <body>
-    <Navbar />
+    {showNav && <Navbar />}
     <slot />
     <Footer />
     <style is:global>
