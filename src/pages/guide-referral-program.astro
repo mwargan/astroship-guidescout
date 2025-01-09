@@ -1,0 +1,17 @@
+---
+import Container from "@components/container.astro";
+import Hero from "@components/hero.astro";
+import Layout from "@layouts/Layout.astro";
+
+const referralCode = Math.random().toString(36).substring(7);
+---
+
+<Layout title="">
+  <Container>
+    <Hero
+      title="Earn €15 for each guide you refer who completes their first booking."
+      subtitle="Share your unique referral link with friends and earn €15 for each guide who completes their first booking on GuideScout."
+      ctaText="Get Your Referral Link"
+    />
+  </Container>
+</Layout>

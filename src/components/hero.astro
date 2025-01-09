@@ -4,7 +4,7 @@ import heroImage from "assets/hero.png";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 
-const { title, subtitle, ctaText, secondaryCtaText } = Astro.props;
+const { title, subtitle, ctaText, secondaryCtaText = false } = Astro.props;
 ---
 
 <main
@@ -36,14 +36,18 @@ const { title, subtitle, ctaText, secondaryCtaText } = Astro.props;
         {ctaText}
         <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
       </Link>
-      <Link
-        size="lg"
-        style="outline"
-        rel="noopener"
-        href="/about"
-        class="flex gap-1 items-center justify-center">
-        {secondaryCtaText}
-      </Link>
+      {
+        secondaryCtaText && (
+          <Link
+            size="lg"
+            style="outline"
+            rel="noopener"
+            href="/about"
+            class="flex gap-1 items-center justify-center">
+            {secondaryCtaText}
+          </Link>
+        )
+      }
     </div>
   </div>
 </main>

@@ -8,6 +8,8 @@ import BentoFeatures from "@components/bentoFeatures.astro";
 import FullpageLayout from "@layouts/FullpageLayout.astro";
 import BlogLayout from "@layouts/BlogLayout.astro";
 import Button from "@components/ui/button.astro";
+import Link from "@components/ui/link.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <FullpageLayout title="Welcome to GuideScout." subtitle="Congratulations!">
@@ -24,9 +26,14 @@ import Button from "@components/ui/button.astro";
       You can increase your success rate by adding photos to your profile.
     </li>
   </ul>
-  <Button slot="footer" type="submit" form="sign-up">
-    Refer a friend and earn €5!
-  </Button>
+  <Link
+    href="/guide-referral-program"
+    class="flex gap-1 items-center justify-center"
+    rel="noopener"
+    slot="footer">
+    Refer a friend and earn €15
+    <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
+  </Link>
 </FullpageLayout>
 
 <style>
