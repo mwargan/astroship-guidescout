@@ -7,7 +7,7 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://guidescout.web3templates.com",
+  site: "https://guidescout.net",
   integrations: [tailwind(), mdx(), sitemap(), icon()],
   adapter: netlify(),
 });
