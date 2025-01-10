@@ -86,7 +86,7 @@ const goToNextStep = () => {
     <!-- What city do you want to guide in -->
     <fieldset class="hidden">
       <div class="mb-4">
-        <label for="city">City</label>
+        <label for="city" class="sr-only">City</label>
         <input
           type="text"
           placeholder="City"
@@ -104,6 +104,7 @@ const goToNextStep = () => {
     <!-- What languages can you speak? Checkbox of 5 most common languages -->
     <fieldset class="hidden">
       <div class="mb-4">
+        <label for="languages" class="sr-only">Languages</label>
         <div class="flex flex-wrap gap-2 flex-col">
           <label
             ><input
@@ -156,11 +157,12 @@ const goToNextStep = () => {
     <!-- Qualifications -->
     <fieldset class="hidden">
       <div class="mb-4">
+        <label for="qualifications" class="sr-only">Qualifications</label>
         <div class="flex flex-wrap gap-2 flex-col">
           <label
             ><input
               type="checkbox"
-              name="languages"
+              name="qualifications"
               value="First Aid Certificate"
               class="mr-2"
               checked
@@ -169,15 +171,15 @@ const goToNextStep = () => {
           <label
             ><input
               type="checkbox"
-              name="languages"
+              name="qualifications"
               value="Car Driving Licence"
               class="mr-2"
-            />Car Driving Licence</label
+            />Car (B) Driving Licence</label
           >
           <label
             ><input
               type="checkbox"
-              name="languages"
+              name="qualifications"
               value="PADI Dive Master Certification"
               class="mr-2"
             />PADI Dive Master Certification</label
@@ -185,7 +187,7 @@ const goToNextStep = () => {
           <label
             ><input
               type="checkbox"
-              name="languages"
+              name="qualifications"
               value="Tour Guide Certification"
               class="mr-2"
             />Tour Guide Certification</label
@@ -193,14 +195,14 @@ const goToNextStep = () => {
           <label
             ><input
               type="checkbox"
-              name="languages"
+              name="qualifications"
               value="Tourism Degree"
               class="mr-2"
             />Tourism Degree</label
           >
         </div>
         <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-          Please select at least one language.
+          Please select at least one qualification.
         </div>
       </div>
     </fieldset>
@@ -344,11 +346,12 @@ const goToNextStep = () => {
       return;
     }
 
+    form.classList.remove("was-validated");
+
     goToNextStep();
   });
 
   const goToNextStep = () => {
-    console.log("Going to next step", currentStep);
     if (currentStep < steps.length - 1) {
       currentStep++;
       updateStep();
