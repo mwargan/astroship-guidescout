@@ -1,0 +1,82 @@
+---
+import Container from "@components/container.astro";
+import Layout from "@layouts/Layout.astro";
+import Hero from "@components/hero.astro";
+import TourAgencies from "../../data/tourAgencies.json";
+import Link from "@components/ui/link.astro";
+import { Icon } from "astro-icon/components";
+
+export async function getStaticPaths() {
+  let features = TourAgencies.features.map((company) => {
+    return {
+      name: (
+        company.properties["name:en"] ??
+        company.properties["name:uk"] ??
+        company.properties.name
+      )
+        ?.trim()
+        .normalize(),
+      website: (company.properties["contact:website"] ??
+          company.properties.website ??
+          undefined)
+    };
+  });
+
+  // Filter out companies without a name
+  features = features.filter(
+    (company) =>
+      company.name?.length > 1 &&
+      // Obly alpahnumeric characters and spaces
+      company.name.match(/^[a-zA-Z0-9 ]+$/)
+  );
+
+  // Make sure each name is unique
+  features = features.filter(
+    (company, index, self) =>
+      index === self.findIndex((t) => t.name === company.name)
+  );
+
+  return features
+    .map((company) => ({
+      params: {
+        companyName: company.name,
+        website: company.website,
+      },
+    }))
+    .filter((company) => company.params.companyName);
+}
+
+const { companyName, website } = Astro.params;
+---
+
+<Layout title={`Guide your way with ${companyName}`}>
+  <Container>
+    <Hero
+      title={`Guide your way with ${companyName}.`}
+      subtitle={`Get local gigs with ${companyName}. You choose the jobs you want, the hours you want, and what you want to do.`}
+      ctaText="Sign Up Now – It’s Free">
+      <Link
+        href="#"
+        href="/sign-up"
+        class="flex gap-1 items-center justify-center"
+        rel="noopener">
+        Sign Up Now - It's Free
+        <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
+      </Link>
+
+      {
+        website && (
+          <Link
+            size="lg"
+            style="outline"
+            rel="noopener"
+            href={website}
+            class="flex gap-1 items-center justify-center"
+            target="_blank">
+            Visit {companyName} Website
+          </Link>
+        )
+      }
+    </Hero>
+  </Container>
+</Layout>
