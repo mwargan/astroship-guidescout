@@ -1,16 +1,44 @@
 ---
-import Container from "@components/container.astro";
-import Features from "@components/features.astro";
-import Hero from "@components/hero.astro";
-import Testimonial from "@components/testimonial.astro";
-import Layout from "@layouts/Layout.astro";
-import BentoFeatures from "@components/bentoFeatures.astro";
 import FullpageLayout from "@layouts/FullpageLayout.astro";
-import BlogLayout from "@layouts/BlogLayout.astro";
 import Button from "@components/ui/button.astro";
+
+const steps = [
+  {
+    title: "What’s your name?",
+    subtitle: "Hey there, guide!",
+  },
+  {
+    title: "What city do you want to guide in?",
+    subtitle: "Tell us about your preferences.",
+  },
+  {
+    title: "What languages can you speak?",
+    subtitle: "Tell us about you.",
+  },
+  {
+    title: "What are your qualifications?",
+    subtitle: "Tell us about you.",
+  },
+  {
+    title: "How can you be reached?",
+    subtitle: "Finish setting up your GuideScout account.",
+  },
+];
+
+let currentStep = 0;
+
+const lastSTep = steps.length - 1;
+
+const { title, subtitle } = steps[currentStep];
+
+const goToNextStep = () => {
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+  }
+};
 ---
 
-<FullpageLayout title="What’s your name?" subtitle="Hey there, guide!">
+<FullpageLayout title={title} subtitle={subtitle}>
   <form
     data-netlify="true"
     method="POST"
@@ -26,52 +54,208 @@ import Button from "@components/ui/button.astro";
     />
     <!-- Referral code input field -->
     <input id="referral" type="hidden" name="referral" />
-    <div class="mb-4">
-      <label for="name">First Name</label>
-      <input
-        type="text"
-        placeholder="First Name"
-        required
-        class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-        name="name"
-      />
-      <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-        Please provide your first name.
+    <fieldset>
+      <div class="mb-4">
+        <label for="name">First Name</label>
+        <input
+          type="text"
+          placeholder="First Name"
+          required
+          class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+          name="name"
+        />
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Please provide your first name.
+        </div>
       </div>
-    </div>
-    <div class="mb-4">
-      <label for="surname">Surname</label>
-      <input
-        type="text"
-        placeholder="Surname"
-        required
-        class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-        name="surname"
-      />
-      <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-        Please provide your first name.
+      <div class="mb-4">
+        <label for="surname">Surname</label>
+        <input
+          type="text"
+          placeholder="Surname"
+          required
+          class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+          name="surname"
+        />
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Please provide your first name.
+        </div>
       </div>
-    </div>
-    <div class="mb-4">
-      <label for="email_address">Email Address</label><input
-        id="email_address"
-        type="email"
-        placeholder="Email Address"
-        name="email"
-        required
-        class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-      />
-      <div class="empty-feedback text-red-400 text-sm mt-1">
-        Please provide your email address.
-      </div>
-      <div class="invalid-feedback text-red-400 text-sm mt-1">
-        Please provide a valid email address.
-      </div>
-    </div>
+    </fieldset>
 
-    <!-- Put the button in the slot named Footer -->
+    <!-- What city do you want to guide in -->
+    <fieldset class="hidden">
+      <div class="mb-4">
+        <label for="city">City</label>
+        <input
+          type="text"
+          placeholder="City"
+          required
+          class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+          name="city"
+        />
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Please provide the city you want to guide in.
+        </div>
+      </div>
+      <!-- Put the button in the slot named Footer -->
+    </fieldset>
+
+    <!-- What languages can you speak? Checkbox of 5 most common languages -->
+    <fieldset class="hidden">
+      <div class="mb-4">
+        <div class="flex flex-wrap gap-2 flex-col">
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="english"
+              class="mr-2"
+              checked
+            />English</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="spanish"
+              class="mr-2"
+            />Spanish</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="french"
+              class="mr-2"
+            />French</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="german"
+              class="mr-2"
+            />German</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="italian"
+              class="mr-2"
+            />Italian</label
+          >
+        </div>
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Please select at least one language.
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Qualifications -->
+    <fieldset class="hidden">
+      <div class="mb-4">
+        <div class="flex flex-wrap gap-2 flex-col">
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="First Aid Certificate"
+              class="mr-2"
+              checked
+            />First Aid Certificate</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="Car Driving Licence"
+              class="mr-2"
+            />Car Driving Licence</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="PADI Dive Master Certification"
+              class="mr-2"
+            />PADI Dive Master Certification</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="Tour Guide Certification"
+              class="mr-2"
+            />Tour Guide Certification</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="languages"
+              value="Tourism Degree"
+              class="mr-2"
+            />Tourism Degree</label
+          >
+        </div>
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Please select at least one language.
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Contact -->
+    <fieldset class="hidden">
+      <div class="mb-4">
+        <label for="email_address">Email Address</label><input
+          id="email_address"
+          type="email"
+          placeholder="Email Address"
+          name="email"
+          required
+          class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+        />
+        <div class="empty-feedback text-red-400 text-sm mt-1">
+          Please provide your email address.
+        </div>
+        <div class="invalid-feedback text-red-400 text-sm mt-1">
+          Please provide a valid email address.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="phone_number">Phone Number (starting with +)</label><input
+          id="phone_number"
+          type="tel"
+          placeholder="Phone Number"
+          name="phone"
+          required
+          class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+          pattern="^\+[0-9]{1,15}$"
+          minlength="7"
+          maxlength="16"
+          inputmode="tel"
+          autocomplete="tel"
+        />
+        <div class="empty-feedback text-red-400 text-sm mt-1">
+          Please provide your phone number.
+        </div>
+        <div class="invalid-feedback text-red-400 text-sm mt-1">
+          Please provide a valid phone number.
+        </div>
+      </div>
+    </fieldset>
+
+    <!--  -->
   </form>
-  <Button slot="footer" type="submit" form="sign-up">Sign Up</Button>
+  <Button
+    slot="footer"
+    type="button"
+    id="next"
+    onclick={goToNextStep}
+    form="sign-up">
+    Next
+  </Button>
   <a slot="footer" href="/sign-up" class="mt-1
    underline"
     >Already have an account?</a
@@ -98,22 +282,105 @@ import Button from "@components/ui/button.astro";
   }
 </style>
 
-<script is:inline>
+<script define:vars={{ steps }}>
+  let currentStep = 0;
+
   const form = document.getElementById("sign-up");
-  const result = document.getElementById("result");
 
   // Get the referrer code from the URL if it exists
   const urlParams = new URLSearchParams(window.location.search);
   const referralCode = urlParams.get("referral");
 
   // Set the referral code in the hidden input field
-  document.getElementById("referral").value = referralCode;
+  if (referralCode) {
+    document.getElementById("referral").value = referralCode;
+  }
 
   form.addEventListener("submit", function (e) {
     form.classList.add("was-validated");
     if (!form.checkValidity()) {
-      form.querySelectorAll(":invalid")[0].focus();
+      const firstElementInvalid = form.querySelectorAll(":invalid")[0];
+
+      //   Find which fieldset the invalid element is in
+      let fieldset = firstElementInvalid.closest("fieldset");
+
+      // Find the index of the fieldset
+      let index = Array.from(form.querySelectorAll("fieldset")).indexOf(
+        fieldset
+      );
+
+      // If the index is not the current step, go to that step
+      if (index !== currentStep) {
+        currentStep = index;
+        updateStep();
+      }
       return;
     }
   });
+
+  //   Next and prev handlers
+  const nextButton = document.getElementById("next");
+  nextButton.addEventListener("click", function (e) {
+    // If its the last step, submit the form
+    if (currentStep === steps.length - 1) {
+      return;
+    }
+    e.preventDefault();
+    form.classList.add("was-validated");
+
+    // Get all elements in the fieldset
+    const fieldset = form.querySelectorAll("fieldset")[currentStep];
+    const inputs = fieldset.querySelectorAll("input");
+
+    // Check if all inputs are valid
+    let allValid = true;
+    inputs.forEach((input) => {
+      if (!input.checkValidity()) {
+        allValid = false;
+      }
+    });
+
+    if (!allValid) {
+      return;
+    }
+
+    goToNextStep();
+  });
+
+  const goToNextStep = () => {
+    console.log("Going to next step", currentStep);
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      updateStep();
+    }
+
+    // if its the last step, replace the next button text with submit and type to submit
+    if (currentStep === steps.length - 1) {
+      nextButton.textContent = "Submit";
+      nextButton.type = "submit";
+    }
+  };
+
+  const goToPrevStep = () => {
+    if (currentStep > 0) {
+      currentStep--;
+      updateStep();
+    }
+  };
+
+  const updateStep = () => {
+    const { title, subtitle } = steps[currentStep];
+    document.querySelector("h1").textContent = title;
+    document.querySelector("p").textContent = subtitle;
+
+    // Hide all fieldsets by adding the hidden class
+    form.querySelectorAll("fieldset").forEach((fieldset) => {
+      fieldset.classList.add("hidden");
+    });
+
+    // Show the current fieldset
+    form.querySelectorAll("fieldset")[currentStep].classList.remove("hidden");
+  };
+
+  updateStep();
 </script>
