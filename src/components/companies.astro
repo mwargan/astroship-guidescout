@@ -1,0 +1,86 @@
+---
+// @ts-ignore
+import { Icon } from "astro-icon/components";
+import TourAgencies from "../data/tourAgencies.json";
+import { getSlug, getFilteredFeatures } from "@utils/all.ts";
+
+// Interface for possible administrative levels
+interface Props {
+  query: string;
+  administrativeLevel:
+    | "amenity"
+    | "street"
+    | "city"
+    | "county"
+    | "state"
+    | "country"
+    | "postalcode";
+}
+
+// If there is a city prop, filter the agencies by city
+const { query = null, administrativeLevel = "city" } = Astro.props;
+
+// Make sure each agency is unique by name
+let agencies = getFilteredFeatures(TourAgencies.features);
+
+// Get city bounding box by calling the API of OpenStreetMap
+const getCityBoundingBox = async (query, administrativeLevel = "city") => {
+  const base_url = `https://nominatim.openstreetmap.org`;
+  const full_url = `${base_url}/search?${administrativeLevel}=${query}&format=json`;
+
+  try {
+    console.log("Fetching city bounding box:", full_url);
+    const response = await fetch(full_url);
+    const data = await response.json();
+
+    return data[0]?.boundingbox;
+  } catch (error) {
+    console.error("Failed to fetch city bounding box:", error);
+    return [];
+  }
+};
+
+// Filter the agencies by city
+if (query) {
+  // Get the bounding box of the city
+  const boundingBox = await getCityBoundingBox(query, administrativeLevel);
+
+  agencies = agencies.filter((agency) => {
+    const coordinates = agency.geometry.coordinates;
+    return (
+      coordinates[0] >= boundingBox[2] &&
+      coordinates[0] <= boundingBox[3] &&
+      coordinates[1] >= boundingBox[0] &&
+      coordinates[1] <= boundingBox[1]
+    );
+  });
+}
+
+const totalAgencies = agencies.length;
+
+// Limit to 10 agencies
+agencies = agencies.slice(0, 6);
+---
+
+<div class="mt-24">
+  <h2 class="text-center text-slate-500">
+    Work with {totalAgencies}+ tour companies
+  </h2>
+  <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
+    {
+      agencies?.length > 0 ? (
+        agencies.map((agency) => (
+          <a
+            href={`/companies/${getSlug(agency.properties["name:en"] ?? agency.properties.name)}`}>
+            {agency.properties["name:en"] ?? agency.properties.name}
+          </a>
+        ))
+      ) : (
+        <p class="text-slate-500">
+          We're coming soon. Please check back in the future for guiding
+          opportunities in {query}.
+        </p>
+      )
+    }
+  </div>
+</div>

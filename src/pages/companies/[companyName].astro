@@ -6,41 +6,11 @@ import TourAgencies from "../../data/tourAgencies.json";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 import OlMap from "@components/olMap.vue";
-import { getSlug } from "@utils/all";
+import { getSlug, getFilteredFeatures } from "@utils/all.ts";
 import HowItWorksCompany from "@components/howItWorksCompany.astro";
 
 export async function getStaticPaths() {
-  let features = TourAgencies.features.map((company) => {
-    return {
-      ...company,
-      name: (
-        company.properties["name:en"] ??
-        company.properties["name:uk"] ??
-        company.properties.name
-      )
-        ?.trim()
-        .normalize(),
-      website:
-        company.properties["contact:website"] ??
-        company.properties.website ??
-        undefined,
-    };
-  });
-
-  // Filter out companies without a name
-  features = features.filter(
-    (company) =>
-      company.name?.length > 1 &&
-      // Obly alpahnumeric characters and spaces
-      company.name.match(/^[a-zA-Z0-9 ]+$/)
-  );
-
-  // Make sure each name is unique
-  features = features.filter(
-    (company, index, self) =>
-      index ===
-      self.findIndex((t) => t.name.toLowerCase() === company.name.toLowerCase())
-  );
+  let features = getFilteredFeatures(TourAgencies.features);
 
   return features
     .map((company) => ({
