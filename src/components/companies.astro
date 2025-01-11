@@ -1,6 +1,4 @@
 ---
-// @ts-ignore
-import { Icon } from "astro-icon/components";
 import TourAgencies from "../data/tourAgencies.json";
 import { getSlug, getFilteredFeatures } from "@utils/all.ts";
 
@@ -22,6 +20,7 @@ const { query = null, administrativeLevel = "city" } = Astro.props;
 
 // Make sure each agency is unique by name
 let agencies = getFilteredFeatures(TourAgencies.features);
+const totalAgencies = agencies.length;
 
 // Get city bounding box by calling the API of OpenStreetMap
 const getCityBoundingBox = async (query, administrativeLevel = "city") => {
@@ -55,8 +54,6 @@ if (query) {
     );
   });
 }
-
-const totalAgencies = agencies.length;
 
 // Limit to 10 agencies
 agencies = agencies.slice(0, 6);
