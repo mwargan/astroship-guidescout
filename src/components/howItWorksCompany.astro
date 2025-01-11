@@ -1,0 +1,71 @@
+---
+import { Icon } from "astro-icon/components";
+import heroImage from "assets/hero.png";
+import { Picture } from "astro:assets";
+
+const { title, description, companyName } = Astro.props;
+---
+
+<div class="overflow-hidden bg-white">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div
+      class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+      <div class="lg:pr-8 lg:pt-4 order-1">
+        <div class="lg:max-w-lg">
+          <h2 class="text-base/7 font-semibold text-indigo-600">
+            How it works
+          </h2>
+          <p
+            class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            {title}
+          </p>
+          {
+            description && (
+              <p class="mt-6 text-lg/8 text-gray-600">{description}</p>
+            )
+          }
+          <dl
+            class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+            <div class="relative">
+              <dt class="inline font-semibold text-gray-900">
+                1. Sign up to GuideScout.
+              </dt>
+              <dd class="inline">
+                Create an account as a freelance guide. It’s quick, easy, and
+                free to get started.
+              </dd>
+            </div>
+            <div class="relative">
+              <dt class="inline font-semibold text-gray-900">
+                2. Get tour offers from {companyName}.
+              </dt>
+              <dd class="inline">
+                You'll get offers for tours that match your qualifications every
+                time {companyName} needs a guide.
+              </dd>
+            </div>
+            <div class="relative">
+              <dt class="inline font-semibold text-gray-900">
+                3. Accept the jobs you want.
+              </dt>
+              <dd class="inline">
+                You can accept offers you receive from {companyName} that you're
+                interested in. You choose the hours, pay, and tours you want to guide.
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <Picture
+        src={heroImage}
+        alt="Astronaut in the air"
+        widths={[200, 400, 600]}
+        sizes="(max-width: 800px) 100vw, 620px"
+        loading="eager"
+        format="avif"
+        class="w-full hidden md:block"
+      />
+    </div>
+  </div>
+</div>

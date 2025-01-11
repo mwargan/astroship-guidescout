@@ -7,6 +7,7 @@ import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 import OlMap from "@components/olMap.vue";
 import { getSlug } from "@utils/all";
+import HowItWorksCompany from "@components/howItWorksCompany.astro";
 
 export async function getStaticPaths() {
   let features = TourAgencies.features.map((company) => {
@@ -94,5 +95,10 @@ const { company } = Astro.props;
         />
       </div>
     </Hero>
+    <HowItWorksCompany
+      title=`Start guiding with ${company.name}`
+      companyName={company.name}
+      description={company.properties.description ?? company.properties.note}
+    />
   </Container>
 </Layout>
