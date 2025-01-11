@@ -1,18 +1,11 @@
 ---
 /* Do not prerender */
-export const prerender = false;
-
 import Container from "@components/container.astro";
 import Features from "@components/features.astro";
 import Hero from "@components/hero.astro";
 import Testimonial from "@components/testimonial.astro";
 import Layout from "@layouts/Layout.astro";
-import BentoFeatures from "@components/bentoFeatures.astro";
 import Companies from "@components/companies.astro";
-
-const {
-  geo: { city, country },
-} = Astro.locals.netlify.context;
 ---
 
 <Layout title="">
@@ -66,10 +59,7 @@ const {
         },
       ]}
     />
-    <Companies
-      query={city || country?.name || "Finland"}
-      administrativeLevel={city ? "city" : "country"}
-    />
+    <Companies query="Lapland" administrativeLevel="state" />
     <Testimonial
       text="GuideScout is a fantastic idea. No more spending hours trying to find clients and manage bookings. Now, companies come to me! They handle the logistics—bookings, payments, and even equipment—so I can focus on what I love: sharing unforgettable travel experiences. If you’re a guide looking to grow and work on your terms, GuideScout is the way to go."
       author="Lucía Ferrer"
