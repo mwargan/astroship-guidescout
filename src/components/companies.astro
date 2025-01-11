@@ -20,7 +20,7 @@ const { query = null, administrativeLevel = "city" } = Astro.props;
 
 // Make sure each agency is unique by name
 let agencies = getFilteredFeatures(TourAgencies.features);
-const totalAgencies = agencies.length;
+const totalAgencies = agencies.length.toLocaleString();
 
 // Get city bounding box by calling the API of OpenStreetMap
 const getCityBoundingBox = async (query, administrativeLevel = "city") => {
