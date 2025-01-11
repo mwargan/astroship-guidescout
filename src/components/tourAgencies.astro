@@ -1,4 +1,6 @@
 ---
+import { getSlug } from "@utils/all";
+
 interface Props {
   place: string;
 }
@@ -36,7 +38,9 @@ const agencies = await getData(place);
     agencies?.length > 0 ? (
       agencies.map((agency) => (
         <div class="gap-4 items-start">
-          <h3 class="text-xl font-bold">{agency}</h3>
+          <h3 class="text-xl font-bold">
+            <a href={`/companies/${getSlug(agency)}`}>{agency}</a>
+          </h3>
         </div>
       ))
     ) : (

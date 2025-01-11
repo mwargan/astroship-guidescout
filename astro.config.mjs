@@ -5,9 +5,11 @@ import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import netlify from '@astrojs/netlify';
 
+import vue from "@astrojs/vue";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://guidescout.net",
-  integrations: [tailwind(), mdx(), sitemap(), icon()],
+  integrations: [tailwind(), mdx(), sitemap(), icon(), vue()],
   adapter: netlify(),
 });

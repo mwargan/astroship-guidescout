@@ -5,10 +5,13 @@ import Hero from "@components/hero.astro";
 import TourAgencies from "../../data/tourAgencies.json";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
+import OlMap from "@components/olMap.vue";
+import { getSlug } from "@utils/all";
 
 export async function getStaticPaths() {
   let features = TourAgencies.features.map((company) => {
     return {
+      ...company,
       name: (
         company.properties["name:en"] ??
         company.properties["name:uk"] ??
@@ -16,9 +19,10 @@ export async function getStaticPaths() {
       )
         ?.trim()
         .normalize(),
-      website: (company.properties["contact:website"] ??
-          company.properties.website ??
-          undefined)
+      website:
+        company.properties["contact:website"] ??
+        company.properties.website ??
+        undefined,
     };
   });
 
@@ -33,27 +37,31 @@ export async function getStaticPaths() {
   // Make sure each name is unique
   features = features.filter(
     (company, index, self) =>
-      index === self.findIndex((t) => t.name === company.name)
+      index ===
+      self.findIndex((t) => t.name.toLowerCase() === company.name.toLowerCase())
   );
 
   return features
     .map((company) => ({
       params: {
-        companyName: company.name,
-        website: company.website,
+        // Slugify the name
+        companyName: getSlug(company.name),
+      },
+      props: {
+        company: company,
       },
     }))
     .filter((company) => company.params.companyName);
 }
 
-const { companyName, website } = Astro.params;
+const { company } = Astro.props;
 ---
 
-<Layout title={`Guide your way with ${companyName}`}>
+<Layout title={`Guide your way with ${company.name}`}>
   <Container>
     <Hero
-      title={`Guide your way with ${companyName}.`}
-      subtitle={`Get local gigs with ${companyName}. You choose the jobs you want, the hours you want, and what you want to do.`}
+      title={`Guide your way with ${company.name}${company.properties["addr:city"] ? " in " + company.properties["addr:city"] : ""}.`}
+      subtitle={`Get local gigs with ${company.name}. You choose the jobs you want, the hours you want, and what you want to do.`}
       ctaText="Sign Up Now – It’s Free">
       <Link
         href="#"
@@ -65,18 +73,26 @@ const { companyName, website } = Astro.params;
       </Link>
 
       {
-        website && (
+        company.properties["addr:city"] && (
           <Link
             size="lg"
             style="outline"
             rel="noopener"
-            href={website}
-            class="flex gap-1 items-center justify-center"
-            target="_blank">
-            Visit {companyName} Website
+            href={`/cities/${company.properties["addr:city"]}`}
+            class="flex gap-1 items-center justify-center">
+            Explore more in {company.properties["addr:city"]}
           </Link>
         )
       }
+      <div
+        slot="picture"
+        class="md:order-1 block h-full w-full min-h-96 pb-6 md:pb-0">
+        <OlMap
+          client:only
+          type={company.geometry.type}
+          coordinates={company.geometry.coordinates}
+        />
+      </div>
     </Hero>
   </Container>
 </Layout>
