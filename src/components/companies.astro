@@ -1,6 +1,5 @@
 ---
-import TourAgencies from "../data/tourAgencies.json";
-import { getSlug, getFilteredFeatures } from "@utils/all.ts";
+import { getCollection } from "astro:content";
 
 // Interface for possible administrative levels
 interface Props {
@@ -19,7 +18,7 @@ interface Props {
 const { query = null, administrativeLevel = "city" } = Astro.props;
 
 // Make sure each agency is unique by name
-let agencies = getFilteredFeatures(TourAgencies.features);
+let agencies = await getCollection("agency");
 const totalAgencies = agencies.length.toLocaleString();
 
 // Get city bounding box by calling the API of OpenStreetMap
@@ -45,7 +44,7 @@ if (query) {
   const boundingBox = await getCityBoundingBox(query, administrativeLevel);
 
   agencies = agencies.filter((agency) => {
-    const coordinates = agency.geometry.coordinates;
+    const coordinates = agency.data.geometry.coordinates;
     return (
       coordinates[0] >= boundingBox[2] &&
       coordinates[0] <= boundingBox[3] &&
@@ -67,10 +66,7 @@ agencies = agencies.slice(0, 6);
     {
       agencies?.length > 0 ? (
         agencies.map((agency) => (
-          <a
-            href={`/companies/${getSlug(agency.properties["name:en"] ?? agency.properties.name)}`}>
-            {agency.properties["name:en"] ?? agency.properties.name}
-          </a>
+          <a href={`/companies/${agency.data.slug}`}>{agency.data.name}</a>
         ))
       ) : (
         <p class="text-slate-500">

@@ -8,7 +8,13 @@ export const getFormattedDate = (date) =>
       })
     : "";
 
-export const getSlug = (title) => title.toLowerCase().split(" ").join("-");
+export const getSlug = (title, city = null as string | null) => {
+  let slug = title?.toLowerCase().split(" ").join("-");
+  if (city) {
+    slug += "-" + city.toLowerCase().split(" ").join("-");
+  }
+  return slug;
+};
 
 export interface RootFeature {
   type: string;

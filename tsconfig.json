@@ -24,6 +24,9 @@
       ],
       "@pages/*": [
         "pages/*"
+      ],
+      "@data/*": [
+        "data/*"
       ]
     },
     "jsx": "preserve"

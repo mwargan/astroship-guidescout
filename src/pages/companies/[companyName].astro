@@ -6,20 +6,20 @@ import TourAgencies from "../../data/tourAgencies.json";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 import OlMap from "@components/olMap.vue";
-import { getSlug, getFilteredFeatures } from "@utils/all.ts";
 import HowItWorksCompany from "@components/howItWorksCompany.astro";
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  let features = getFilteredFeatures(TourAgencies.features);
+  let features = await getCollection("agency");
 
   return features
     .map((company) => ({
       params: {
         // Slugify the name
-        companyName: getSlug(company.name),
+        companyName: company.data.slug,
       },
       props: {
-        company: company,
+        company: company.data,
       },
     }))
     .filter((company) => company.params.companyName);

@@ -5,7 +5,12 @@ interface Props {
   place: string;
 }
 
-export const getData = async (place: string): Promise<string[]> => {
+interface AgencyType {
+  name: string;
+  city: string | null | undefined;
+}
+
+export const getData = async (place: string): Promise<AgencyType[]> => {
   const base_url = `https://guidescout.net`;
   const full_url = `${base_url}/api/tourAgencies?place=${place}`;
 
@@ -15,12 +20,15 @@ export const getData = async (place: string): Promise<string[]> => {
 
     // Create a set to remove duplicates by name
     const uniqueAgencies = new Set(
-      agencies?.results?.map(
-        (agency) => agency.tags["name:en"] ?? agency.tags.name
-      )
+      agencies?.results?.map((agency) => {
+        return {
+          name: agency.tags["name:en"] ?? agency.tags.name,
+          city: agency.tags["addr:city"],
+        };
+      })
     );
 
-    return Array.from(uniqueAgencies) as string[];
+    return Array.from(uniqueAgencies) as AgencyType[];
   } catch (error) {
     console.error("Failed to fetch agencies:", error);
     return [];
@@ -39,7 +47,9 @@ const agencies = await getData(place);
       agencies.map((agency) => (
         <div class="gap-4 items-start">
           <h3 class="text-xl font-bold">
-            <a href={`/companies/${getSlug(agency)}`}>{agency}</a>
+            <a href={`/companies/${getSlug(agency.name, agency.city)}`}>
+              {agency.name}
+            </a>
           </h3>
         </div>
       ))
