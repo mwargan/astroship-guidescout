@@ -1,5 +1,5 @@
 <template>
-  <div id="map" class="map" tabindex="0"></div>
+  <div id="map" class="map rounded-lg overflow-hidden" tabindex="0"></div>
 </template>
 
 <script setup lang="ts">
