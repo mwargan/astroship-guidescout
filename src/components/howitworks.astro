@@ -1,0 +1,96 @@
+---
+// @ts-ignore
+import heroImage from "assets/hero.png";
+import { Picture } from "astro:assets";
+import Link from "@components/ui/link.astro";
+import { Icon } from "astro-icon/components";
+
+const defaultSteps = [
+  {
+    title: "Accept a guide request",
+    description:
+      "GuideScout instantly connects you with guiding opportunities that match your qualifications, including urgent, one-off gigs needed within hours.",
+    icon: "bx:bxs-user-plus",
+  },
+  {
+    title: "Meet at the company location",
+    description:
+      "The travel company will provide you with all the necessary equipment on site. While on the way there, GuideScout will provide you with all the information to run the tour.",
+    icon: "bx:bxs-user-plus",
+  },
+  {
+    title: "Start the tour with your guests",
+    description:
+      "Lead the tour and provide an unforgettable experience for your guests.",
+    icon: "bx:bxs-user-plus",
+  },
+  {
+    title: "Get paid for your work",
+    description:
+      "Receive payment for your services directly via GuideScout right after your tour is over.",
+    icon: "bx:bxs-user-plus",
+  },
+];
+
+const {
+  title = "How GuideScout works",
+  description = null,
+  steps = defaultSteps,
+  image = heroImage,
+} = Astro.props;
+---
+
+<div class="overflow-hidden bg-white mt-16">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div
+      class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+      <div class="lg:pr-8 lg:pt-4 order-1">
+        <div class="lg:max-w-lg">
+          <h2 class="text-base/7 font-semibold text-indigo-600">
+            How it works
+          </h2>
+          <p
+            class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            {title}
+          </p>
+          {
+            description && (
+              <p class="mt-6 text-lg/8 text-gray-600">{description}</p>
+            )
+          }
+          <dl
+            class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+            {
+              steps.map((step, index) => (
+                <div class="relative">
+                  <dt class="inline font-semibold text-gray-900">
+                    {index + 1}. {step.title}.
+                  </dt>
+                  <dd class="inline">{step.description}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <Link
+            href="#"
+            href="/sign-up"
+            class="flex gap-1 items-center justify-center mt-10"
+            rel="noopener">
+            Get Started
+            <Icon class="text-white w-5 h-5" name="bx:bx-right-arrow-alt" />
+          </Link>
+        </div>
+      </div>
+
+      <Picture
+        src={image}
+        alt="Astronaut in the air"
+        widths={[200, 400, 600]}
+        sizes="(max-width: 800px) 100vw, 620px"
+        loading="eager"
+        format="avif"
+        class="w-full hidden md:block rounded-lg"
+      />
+    </div>
+  </div>
+</div>

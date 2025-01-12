@@ -318,6 +318,9 @@ const goToNextStep = () => {
       }
       return;
     }
+
+    // Save a signed-up state in local storage
+    localStorage.setItem("signed-up", true);
   });
 
   //   Next and prev handlers
