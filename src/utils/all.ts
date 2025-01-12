@@ -9,9 +9,20 @@ export const getFormattedDate = (date) =>
     : "";
 
 export const getSlug = (title, city = null as string | null) => {
-  let slug = title?.toLowerCase().split(" ").join("-");
+  let slug = title
+    ?.toLowerCase()
+    .trim()
+    .normalize()
+    .replace(/\//g, "-")
+    // Replace any invalid URL characters with a -, such as /?%&
+    .replace(/[^a-z0-9]/g, "-")
+    // Remove any double -- or leading/trailing -
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .split(" ")
+    .join("-");
   if (city) {
-    slug += "-" + city.toLowerCase().split(" ").join("-");
+    slug += "-" + city.toLowerCase().replace("/", "-").split(" ").join("-");
   }
   return slug;
 };

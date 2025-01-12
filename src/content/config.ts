@@ -47,9 +47,7 @@ const tourAgenciesCollection = defineCollection({
           company.properties.name
         )
           ?.trim()
-          .normalize()
-          // Replace any slashes with a -
-          .replace(/\//g, "-");
+          .normalize();
         return {
           ...company,
           name,
