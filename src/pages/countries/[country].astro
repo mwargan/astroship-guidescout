@@ -4,6 +4,7 @@ import { Country as CN, City } from "country-state-city";
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
+import Companies from "@components/companies.astro";
 
 export function getStaticPaths() {
   return CN?.getAllCountries().map((country) => ({
@@ -39,6 +40,7 @@ const uniqueCities = Array.from(new Set(cities.map((city) => city.name)));
       ctaText="Sign Up Now – It’s Free"
       secondaryCtaText="Learn How It Works"
     />
+
     <h2 class="text-center text-slate-500">Guide your {flag} city</h2>
 
     <!-- List all cities -->
@@ -51,5 +53,6 @@ const uniqueCities = Array.from(new Set(cities.map((city) => city.name)));
         ))
       }
     </ul>
+    <Companies query={titleCaseCountry} administrativeLevel="country" />
   </Container>
 </Layout>
