@@ -39,25 +39,27 @@ const tourAgenciesCollection = defineCollection({
     // @ts-ignore
     const data = TourAgencies.features;
 
-    return data
-      .map((company) => {
-        const name = (
-          company.properties["name:en"] ??
-          company.properties["name:uk"] ??
-          company.properties.name
+    return (
+      data
+        .map((company) => {
+          const name = (
+            company.properties["name:en"] ??
+            company.properties["name:uk"] ??
+            company.properties.name
+          )?.trim();
+          return {
+            ...company,
+            name,
+            slug: getSlug(name, company.properties["addr:city"]),
+          };
+        })
+        .filter((company) => company.name && company.name.length > 1)
+        // Unique by slug
+        .filter(
+          (company, index, self) =>
+            index === self.findIndex((t) => t.slug === company.slug),
         )
-          ?.trim()
-          .normalize();
-        return {
-          ...company,
-          name,
-          slug: getSlug(name, company.properties["addr:city"]),
-        };
-      })
-      .filter(
-        (company) => company.name && company.name.length > 1,
-        // Only alphanumeric characters and spaces
-      );
+    );
   },
 
   schema: z.object({

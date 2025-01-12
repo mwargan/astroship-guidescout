@@ -27,15 +27,7 @@ const steps = [
 
 let currentStep = 0;
 
-const lastSTep = steps.length - 1;
-
 const { title, subtitle } = steps[currentStep];
-
-const goToNextStep = () => {
-  if (currentStep < steps.length - 1) {
-    currentStep++;
-  }
-};
 ---
 
 <FullpageLayout title={title} subtitle={subtitle}>
@@ -45,7 +37,8 @@ const goToNextStep = () => {
     id="sign-up"
     class="needs-validation"
     action="/signed-up"
-    name="sign-up">
+    name="sign-up"
+    novalidate>
     <input
       type="checkbox"
       class="hidden"
@@ -63,6 +56,8 @@ const goToNextStep = () => {
           required
           class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
           name="name"
+          autofocus
+          autocomplete="given-name"
         />
         <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
           Please provide your first name.
@@ -76,6 +71,7 @@ const goToNextStep = () => {
           required
           class="w-full px-3 py-2 border-2 placeholder:text-gray-500 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
           name="surname"
+          autocomplete="family-name"
         />
         <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
           Please provide your first name.
@@ -250,14 +246,7 @@ const goToNextStep = () => {
 
     <!--  -->
   </form>
-  <Button
-    slot="footer"
-    type="button"
-    id="next"
-    onclick={goToNextStep}
-    form="sign-up">
-    Next
-  </Button>
+  <Button slot="footer" type="submit" id="next" form="sign-up">Next</Button>
   <a slot="footer" href="/sign-up" class="mt-1
    underline"
     >Already have an account?</a
@@ -293,12 +282,21 @@ const goToNextStep = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const referralCode = urlParams.get("referral");
 
+  const nextButton = document.getElementById("next");
+
   // Set the referral code in the hidden input field
   if (referralCode) {
     document.getElementById("referral").value = referralCode;
   }
 
   form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (!isLastStep()) {
+      // Trigger the next button click
+      conditionallyGoToNextStep();
+      return;
+    }
     form.classList.add("was-validated");
     if (!form.checkValidity()) {
       const firstElementInvalid = form.querySelectorAll(":invalid")[0];
@@ -319,18 +317,14 @@ const goToNextStep = () => {
       return;
     }
 
+    // Continue with form submission
+    e.target.submit();
+
     // Save a signed-up state in local storage
     localStorage.setItem("signed-up", true);
   });
 
-  //   Next and prev handlers
-  const nextButton = document.getElementById("next");
-  nextButton.addEventListener("click", function (e) {
-    // If its the last step, submit the form
-    if (currentStep === steps.length - 1) {
-      return;
-    }
-    e.preventDefault();
+  const conditionallyGoToNextStep = () => {
     form.classList.add("was-validated");
 
     // Get all elements in the fieldset
@@ -352,18 +346,17 @@ const goToNextStep = () => {
     form.classList.remove("was-validated");
 
     goToNextStep();
-  });
+  };
 
   const goToNextStep = () => {
-    if (currentStep < steps.length - 1) {
+    if (!isLastStep()) {
       currentStep++;
       updateStep();
     }
 
     // if its the last step, replace the next button text with submit and type to submit
-    if (currentStep === steps.length - 1) {
+    if (isLastStep()) {
       nextButton.textContent = "Submit";
-      nextButton.type = "submit";
     }
   };
 
@@ -372,6 +365,10 @@ const goToNextStep = () => {
       currentStep--;
       updateStep();
     }
+  };
+
+  const isLastStep = () => {
+    return currentStep === steps.length - 1;
   };
 
   const updateStep = () => {
