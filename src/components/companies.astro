@@ -45,6 +45,9 @@ if (query) {
 
   agencies = agencies.filter((agency) => {
     const coordinates = agency.data.geometry.coordinates;
+    if (!coordinates || !boundingBox) {
+      return false;
+    }
     return (
       coordinates[0] >= boundingBox[2] &&
       coordinates[0] <= boundingBox[3] &&
