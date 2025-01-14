@@ -1,9 +1,9 @@
 ---
 // @ts-ignore
-import heroImage from "assets/hero.png";
-import { Picture } from "astro:assets";
+import appHomeImage from "assets/appHome2.jpg";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
+import PhoneMockup from "./phoneMockup.astro";
 
 const defaultSteps = [
   {
@@ -36,11 +36,11 @@ const {
   title = "How GuideScout works",
   description = null,
   steps = defaultSteps,
-  image = heroImage,
+  image = appHomeImage,
 } = Astro.props;
 ---
 
-<div class="overflow-hidden bg-white mt-0 lg:mt-16">
+<div class="overflow-hidden bg-white lg:mt-16">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div
       class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
@@ -82,15 +82,7 @@ const {
         </div>
       </div>
 
-      <Picture
-        src={image}
-        alt="Astronaut in the air"
-        widths={[200, 400, 600]}
-        sizes="(max-width: 800px) 100vw, 620px"
-        loading="eager"
-        format="avif"
-        class="w-full hidden md:block rounded-lg"
-      />
+      <PhoneMockup image={image} />
     </div>
   </div>
 </div>
