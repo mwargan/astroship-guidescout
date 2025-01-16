@@ -17,6 +17,7 @@ export default defineConfig({
       forward: ['dataLayer.push'],
     },
   })],
+  output: "static",
   adapter: netlify({
     cacheOnDemandPages: true,
   }),
