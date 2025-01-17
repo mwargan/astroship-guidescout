@@ -32,13 +32,22 @@ const { title, subtitle } = steps[currentStep];
 
 <FullpageLayout title={title} subtitle={subtitle}>
   <form
-    data-netlify="true"
     method="POST"
     id="sign-up"
     class="needs-validation"
-    action="/signed-up"
+    action="https://api.web3forms.com/submit"
     name="sign-up"
     novalidate>
+    <input
+      type="hidden"
+      name="access_key"
+      value="df989702-dd07-482b-b827-328ce977a693"
+    />
+    <input
+      type="hidden"
+      name="redirect"
+      value="https://guidescout.net/signed-up"
+    />
     <input
       type="checkbox"
       class="hidden"
