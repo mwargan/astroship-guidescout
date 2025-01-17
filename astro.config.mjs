@@ -9,6 +9,8 @@ import vue from "@astrojs/vue";
 
 import partytown from "@astrojs/partytown";
 
+import node from "@astrojs/node";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://guidescout.net",
@@ -18,7 +20,7 @@ export default defineConfig({
     },
   })],
   output: "static",
-  adapter: netlify({
-    cacheOnDemandPages: true,
+  adapter: node({
+    mode: "standalone",
   }),
 });
