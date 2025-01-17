@@ -1,10 +1,16 @@
 ---
-export const prerender = false;
+import { City as CN } from "country-state-city";
 
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
 import TourAgencies from "@components/tourAgencies.astro";
+
+export function getStaticPaths() {
+  return CN?.getAllCities().map((country) => ({
+    params: { city: country.name.toLowerCase() },
+  }));
+}
 
 const { city } = Astro.params;
 
