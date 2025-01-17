@@ -1,8 +1,10 @@
 ---
 import { getSlug } from "@utils/all.ts";
+import { getCollection } from "astro:content";
 
 interface Props {
   place: string;
+  searchLive?: boolean;
 }
 
 interface AgencyType {
@@ -10,7 +12,28 @@ interface AgencyType {
   city: string | null | undefined;
 }
 
-export const getData = async (place: string): Promise<AgencyType[]> => {
+const { place, searchLive = true } = Astro.props;
+
+export const getData = async (
+  place: string,
+  searchLive = true
+): Promise<AgencyType[]> => {
+  if (!searchLive) {
+    const agencies = await getCollection("agency", ({ data }) => {
+      return (
+        data.properties["addr:city"] &&
+        getSlug(data.properties["addr:city"]) === getSlug(place)
+      );
+    });
+
+    return agencies.map((agency) => {
+      return {
+        name: agency.data.properties["name:en"] ?? agency.data.properties.name,
+        city: agency.data.properties["addr:city"],
+      };
+    });
+  }
+
   const base_url = `https://guidescout.net`;
   const full_url = `${base_url}/api/tourAgencies?place=${place}`;
 
@@ -35,10 +58,7 @@ export const getData = async (place: string): Promise<AgencyType[]> => {
   }
 };
 
-const { place } = Astro.props;
-
-// Fetch the data at build or request time
-const agencies = await getData(place);
+const agencies = await getData(place, searchLive);
 ---
 
 <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
