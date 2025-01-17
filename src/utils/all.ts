@@ -15,7 +15,7 @@ export const getSlug = (title, city = null as string | null) => {
     .normalize()
     .replace(/\//g, "-")
     // Replace any invalid URL characters with a -, such as /?%&
-    .replace(/[^a-z0-9]/g, "-")
+    .replace(/[%]/g, "-")
     // Remove any double -- or leading/trailing -
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
@@ -24,7 +24,7 @@ export const getSlug = (title, city = null as string | null) => {
   if (city) {
     slug += "-" + city.toLowerCase().replace("/", "-").split(" ").join("-");
   }
-  return slug;
+  return encodeURI(slug);
 };
 
 export interface RootFeature {

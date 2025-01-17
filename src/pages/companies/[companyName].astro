@@ -16,7 +16,7 @@ export async function getStaticPaths() {
     .map((company) => ({
       params: {
         // Slugify the name
-        companyName: company.data.slug,
+        companyName: decodeURI(company.data.slug),
       },
       props: {
         company: company.data,

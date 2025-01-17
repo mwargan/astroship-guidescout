@@ -5,10 +5,11 @@ import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@components/hero.astro";
 import TourAgencies from "@components/tourAgencies.astro";
+import { getSlug } from "@utils/all.ts";
 
 export function getStaticPaths() {
-  return CN?.getAllCities().map((country) => ({
-    params: { city: country.name.toLowerCase() },
+  return CN?.getAllCities().map((city) => ({
+    params: { city: decodeURI(getSlug(city.name)) },
   }));
 }
 

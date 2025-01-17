@@ -8,7 +8,7 @@ import Companies from "@components/companies.astro";
 
 export function getStaticPaths() {
   return CN?.getAllCountries().map((country) => ({
-    params: { country: country.name.toLowerCase() },
+    params: { country: decodeURI(country.name.toLowerCase()) },
   }));
 }
 
