@@ -34,7 +34,7 @@ export const getData = async (
     });
   }
 
-  const base_url = `https://guidescout.net`;
+  const base_url = Astro.url.origin;
   const full_url = `${base_url}/api/tourAgencies?place=${place}`;
 
   try {

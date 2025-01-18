@@ -55,7 +55,7 @@ const { title, subtitle } = steps[currentStep];
       name="botcheck"
     />
     <!-- Referral code input field -->
-    <input id="referral" type="hidden" name="referral" />
+    <input id="referral" type="hidden" name="referredByCode" />
     <fieldset>
       <div class="mb-4">
         <label for="name">First Name</label>
@@ -286,19 +286,18 @@ const { title, subtitle } = steps[currentStep];
   let currentStep = 0;
 
   const form = document.getElementById("sign-up");
+  const nextButton = document.getElementById("next");
 
   // Get the referrer code from the URL if it exists
   const urlParams = new URLSearchParams(window.location.search);
   const referralCode = urlParams.get("referral");
-
-  const nextButton = document.getElementById("next");
 
   // Set the referral code in the hidden input field
   if (referralCode) {
     document.getElementById("referral").value = referralCode;
   }
 
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     if (!isLastStep()) {
@@ -306,19 +305,15 @@ const { title, subtitle } = steps[currentStep];
       conditionallyGoToNextStep();
       return;
     }
+
     form.classList.add("was-validated");
     if (!form.checkValidity()) {
       const firstElementInvalid = form.querySelectorAll(":invalid")[0];
-
-      //   Find which fieldset the invalid element is in
       let fieldset = firstElementInvalid.closest("fieldset");
 
-      // Find the index of the fieldset
       let index = Array.from(form.querySelectorAll("fieldset")).indexOf(
         fieldset
       );
-
-      // If the index is not the current step, go to that step
       if (index !== currentStep) {
         currentStep = index;
         updateStep();
@@ -326,34 +321,59 @@ const { title, subtitle } = steps[currentStep];
       return;
     }
 
-    // Continue with form submission
-    e.target.submit();
+    // If the form is valid and on the last step, submit the data via fetch
+    const formData = new FormData(form);
 
-    // Save a signed-up state in local storage
-    localStorage.setItem("signed-up", true);
+    // Collect all the form data into a payload
+    const payload = {};
+    formData.forEach((value, key) => {
+      if (payload[key]) {
+        // If the key already exists, push the value into an array
+        if (Array.isArray(payload[key])) {
+          payload[key].push(value);
+        } else {
+          payload[key] = [payload[key], value];
+        }
+      } else {
+        payload[key] = value;
+      }
+    });
+
+    try {
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        // Set the response user.refferalCode to local storage
+        localStorage.setItem("referralCode", result.user.refferalCode);
+
+        // Redirect or show a success message
+        window.location.href = "/signed-up";
+      } else {
+        console.error("Submission failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error occurred while submitting the form:", error);
+    }
   });
 
   const conditionallyGoToNextStep = () => {
     form.classList.add("was-validated");
 
-    // Get all elements in the fieldset
     const fieldset = form.querySelectorAll("fieldset")[currentStep];
     const inputs = fieldset.querySelectorAll("input");
 
-    // Check if all inputs are valid
-    let allValid = true;
-    inputs.forEach((input) => {
-      if (!input.checkValidity()) {
-        allValid = false;
-      }
-    });
-
-    if (!allValid) {
-      return;
-    }
+    let allValid = Array.from(inputs).every((input) => input.checkValidity());
+    if (!allValid) return;
 
     form.classList.remove("was-validated");
-
     goToNextStep();
   };
 
@@ -363,36 +383,19 @@ const { title, subtitle } = steps[currentStep];
       updateStep();
     }
 
-    // if its the last step, replace the next button text with submit and type to submit
     if (isLastStep()) {
       nextButton.textContent = "Submit";
+      nextButton.setAttribute("type", "submit");
     }
   };
 
-  const goToPrevStep = () => {
-    if (currentStep > 0) {
-      currentStep--;
-      updateStep();
-    }
-  };
-
-  const isLastStep = () => {
-    return currentStep === steps.length - 1;
-  };
+  const isLastStep = () => currentStep === steps.length - 1;
 
   const updateStep = () => {
-    const { title, subtitle } = steps[currentStep];
-    document.querySelector("h1").textContent = title;
-    document.querySelector("p").textContent = subtitle;
-
-    // Hide all fieldsets by adding the hidden class
-    form.querySelectorAll("fieldset").forEach((fieldset) => {
-      fieldset.classList.add("hidden");
+    form.querySelectorAll("fieldset").forEach((fieldset, index) => {
+      fieldset.classList.toggle("hidden", index !== currentStep);
     });
-
-    // Show the current fieldset
-    form.querySelectorAll("fieldset")[currentStep].classList.remove("hidden");
   };
 
-  updateStep();
+  document.addEventListener("DOMContentLoaded", updateStep);
 </script>
