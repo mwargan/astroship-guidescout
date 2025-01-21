@@ -35,7 +35,7 @@ const { title, subtitle } = steps[currentStep];
     method="POST"
     id="sign-up"
     class="needs-validation"
-    action="https://api.web3forms.com/submit"
+    action="#"
     name="sign-up"
     novalidate>
     <input
@@ -55,7 +55,7 @@ const { title, subtitle } = steps[currentStep];
       name="botcheck"
     />
     <!-- Referral code input field -->
-    <input id="referral" type="hidden" name="referredByCode" />
+    <input id="referral" type="hidden" name="referral_code" />
     <fieldset>
       <div class="mb-4">
         <label for="name">First Name</label>
@@ -256,9 +256,11 @@ const { title, subtitle } = steps[currentStep];
     <!--  -->
   </form>
   <Button slot="footer" type="submit" id="next" form="sign-up">Next</Button>
-  <a slot="footer" href="/sign-up" class="mt-1
-   underline"
-    >Already have an account?</a
+  <a
+    slot="footer"
+    href="https://app.guidescout.net/login"
+    class="mt-1
+   underline">Already have an account?</a
   >
 </FullpageLayout>
 
@@ -283,6 +285,19 @@ const { title, subtitle } = steps[currentStep];
 </style>
 
 <script define:vars={{ steps }}>
+  const baseUrl = import.meta.env.PUBLIC_API_URL;
+  const user = fetch(`${baseUrl}api/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    credentials: "include",
+  }).then((res) => (res.ok ? console.log(res.json()) : console.log(res)));
+
+  console.log("Got user:", user);
+
   let currentStep = 0;
 
   const form = document.getElementById("sign-up");
@@ -339,25 +354,101 @@ const { title, subtitle } = steps[currentStep];
       }
     });
 
+    // If the languages or qualifications are not arrays, convert them to arrays
+    if (!Array.isArray(payload.languages)) {
+      payload.languages = [payload.languages];
+    }
+
+    if (!Array.isArray(payload.qualifications)) {
+      payload.qualifications = [payload.qualifications];
+    }
+
     try {
-      const response = await fetch("http://localhost:3000/users", {
+      // Fetch the CSRF token from sanctum/csrf-cookie
+      const csrfResponse = await fetch(`${baseUrl}sanctum/csrf-cookie`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include", // Ensure cookies are sent
+      });
+
+      // Check if the CSRF cookie was set correctly
+      if (!csrfResponse.ok) {
+        throw new Error("Failed to get CSRF token");
+      }
+
+      // Fetch the CSRF token from the cookies
+      const csrfToken = decodeURIComponent(
+        document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("XSRF-TOKEN="))
+          ?.split("=")[1] ?? ""
+      );
+
+      if (!csrfToken) {
+        throw new Error("CSRF token not found");
+      }
+
+      const response = await fetch(`${baseUrl}register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-XSRF-Token": csrfToken, // Include the CSRF token here
+          "X-Requested-With": "XMLHttpRequest",
         },
         body: JSON.stringify(payload),
+        credentials: "include",
       });
 
       if (response.ok) {
         const result = await response.json();
 
+        const user = await fetch(`${baseUrl}api/user`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-XSRF-Token": csrfToken, // Include the CSRF token here
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          credentials: "include",
+        }).then((res) => (res.ok ? res.json() : console.log(res)));
+        console.log("Got user:", user);
         // Set the response user.refferalCode to local storage
-        localStorage.setItem("referralCode", result.user.refferalCode);
+        localStorage.setItem("referralCode", user.referral_code);
 
         // Redirect or show a success message
         window.location.href = "/signed-up";
       } else {
         console.error("Submission failed:", response.statusText);
+
+        // If the response is a 422, show the validation errors
+        if (response.status === 422) {
+          const result = await response.json();
+          Object.entries(result.errors).forEach(([key, value]) => {
+            const input = form.querySelector(`[name="${key}"]`);
+            input.classList.add("is-invalid");
+            // Get the next element with invalid-feedback class
+            const invalidFeedbackElement =
+              input.parentElement.querySelector(".invalid-feedback");
+            invalidFeedbackElement.textContent = value;
+
+            // Trigger custom validation on input
+            input.setCustomValidity(value);
+
+            // Reset the input validity on input change
+            input.addEventListener("input", () => {
+              input.setCustomValidity("");
+              input.classList.remove("is-invalid");
+
+              // remove the listener after the first input
+              input.removeEventListener("input", () => {});
+            });
+          });
+        }
       }
     } catch (error) {
       console.error("Error occurred while submitting the form:", error);
@@ -392,9 +483,17 @@ const { title, subtitle } = steps[currentStep];
   const isLastStep = () => currentStep === steps.length - 1;
 
   const updateStep = () => {
-    form.querySelectorAll("fieldset").forEach((fieldset, index) => {
-      fieldset.classList.toggle("hidden", index !== currentStep);
+    const { title, subtitle } = steps[currentStep];
+    document.querySelector("h1").textContent = title;
+    document.querySelector("p").textContent = subtitle;
+
+    // Hide all fieldsets by adding the hidden class
+    form.querySelectorAll("fieldset").forEach((fieldset) => {
+      fieldset.classList.add("hidden");
     });
+
+    // Show the current fieldset
+    form.querySelectorAll("fieldset")[currentStep].classList.remove("hidden");
   };
 
   document.addEventListener("DOMContentLoaded", updateStep);
