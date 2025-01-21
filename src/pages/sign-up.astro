@@ -28,6 +28,8 @@ const steps = [
 let currentStep = 0;
 
 const { title, subtitle } = steps[currentStep];
+
+const baseUrl = import.meta.env.PUBLIC_API_URL;
 ---
 
 <FullpageLayout title={title} subtitle={subtitle}>
@@ -284,8 +286,7 @@ const { title, subtitle } = steps[currentStep];
   }
 </style>
 
-<script define:vars={{ steps }}>
-  const baseUrl = import.meta.env.PUBLIC_API_URL;
+<script define:vars={{ steps, baseUrl }}>
   const user = fetch(`${baseUrl}api/user`, {
     method: "GET",
     headers: {
