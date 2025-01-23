@@ -287,17 +287,11 @@ const baseUrl = import.meta.env.PUBLIC_API_URL;
 </style>
 
 <script define:vars={{ steps, baseUrl }}>
-  const user = fetch(`${baseUrl}api/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    credentials: "include",
-  }).then((res) => (res.ok ? console.log(res.json()) : console.log(res)));
-
-  console.log("Got user:", user);
+  getUser().then((user) => {
+    if (user) {
+      window.location.href = "/signed-up";
+    }
+  });
 
   let currentStep = 0;
 
@@ -407,19 +401,7 @@ const baseUrl = import.meta.env.PUBLIC_API_URL;
       if (response.ok) {
         const result = await response.json();
 
-        const user = await fetch(`${baseUrl}api/user`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-XSRF-Token": csrfToken, // Include the CSRF token here
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          credentials: "include",
-        }).then((res) => (res.ok ? res.json() : console.log(res)));
-        console.log("Got user:", user);
-        // Set the response user.refferalCode to local storage
-        localStorage.setItem("referralCode", user.referral_code);
+        await getUser();
 
         // Redirect or show a success message
         window.location.href = "/signed-up";
@@ -498,4 +480,22 @@ const baseUrl = import.meta.env.PUBLIC_API_URL;
   };
 
   document.addEventListener("DOMContentLoaded", updateStep);
+
+  async function getUser() {
+    const user = await fetch(`${baseUrl}api/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      credentials: "include",
+    }).then((res) => (res.ok ? res.json() : console.log(res)));
+    console.log("Got user:", user);
+    if (!user) return;
+    // Set the response user.refferalCode to local storage
+    localStorage.setItem("referralCode", user.referral_code);
+
+    return user;
+  }
 </script>
