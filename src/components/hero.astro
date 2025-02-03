@@ -4,7 +4,14 @@ import heroImage from "assets/hero.png";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 
-const { title, subtitle, ctaText, secondaryCtaText = false } = Astro.props;
+const {
+  title,
+  subtitle,
+  ctaText,
+  secondaryCtaText = false,
+  ctaLink = "/sign-up",
+  secondaryCtaLink = "/about",
+} = Astro.props;
 ---
 
 <main
@@ -33,7 +40,7 @@ const { title, subtitle, ctaText, secondaryCtaText = false } = Astro.props;
       <slot>
         <Link
           href="#"
-          href="/sign-up"
+          href={ctaLink}
           class="flex gap-1 items-center justify-center"
           rel="noopener">
           {ctaText}
@@ -45,7 +52,7 @@ const { title, subtitle, ctaText, secondaryCtaText = false } = Astro.props;
               size="lg"
               style="outline"
               rel="noopener"
-              href="/about"
+              href={secondaryCtaLink}
               class="flex gap-1 items-center justify-center">
               {secondaryCtaText}
             </Link>

@@ -3,7 +3,9 @@ import Container from "@components/container.astro";
 import Cta from "@components/cta.astro";
 import Features from "@components/features.astro";
 import Hero from "@components/hero.astro";
+import HowItWorksForCompanies from "@components/howItWorksForCompanies.astro";
 import Logos from "@components/logos.astro";
+
 import Layout from "@layouts/Layout.astro";
 ---
 
@@ -14,7 +16,10 @@ import Layout from "@layouts/Layout.astro";
       subtitle="Connecting travel companies with expert freelance guides worldwide."
       ctaText="Get Started Today"
       secondaryCtaText="Request a Demo"
+      ctaLink="/contact"
+      secondaryCtaLink="/contact"
     />
+
     <Features
       title="Everything you need to connect and explore"
       subtitle="GuideScout brings together travel companies and freelance guides for seamless collaboration and unforgettable experiences."
@@ -56,8 +61,13 @@ import Layout from "@layouts/Layout.astro";
           icon: "bx:bxs-briefcase",
         },
       ]}
+      class="mt-12"
     />
-    <!-- <Logos /> -->
+
+    <Logos />
+
+    <HowItWorksForCompanies />
+
     <Cta />
   </Container>
 </Layout>

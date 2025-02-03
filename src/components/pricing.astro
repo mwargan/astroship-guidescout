@@ -18,21 +18,21 @@ const { plan } = Astro.props;
         }
       </p>
       {
-        plan.price.original && (
+        plan.price?.original && (
           <p class="mt-1 text-xl font-medium text-gray-400 line-through md:text-2xl">
             {plan.price.original}
           </p>
         )
       }
       {
-        plan.price.explanation && (
+        plan.price?.explanation && (
           <p class="mt-1 text-sm font-medium text-gray-400">
             {plan.price.explanation}
           </p>
         )
       }
       {
-        plan.price.example && (
+        plan.price?.example && (
           <p class="mt-1 text-xs font-medium text-gray-400">
             Example: {plan.price.example}
           </p>
@@ -40,7 +40,7 @@ const { plan } = Astro.props;
       }
     </div><ul class="grid mt-8 text-left gap-y-4">
       {
-        plan.features.map((item) => (
+        plan.features?.map((item) => (
           <li class="flex items-start gap-3 text-gray-800">
             <Tick class="w-6 h-6" />
             <span>{item}</span>
@@ -49,10 +49,10 @@ const { plan } = Astro.props;
       }
     </ul><div class="flex mt-8">
       <Link
-        href={plan.button.link || "#"}
+        href={plan.button?.link || "#"}
         block
         style={plan.popular ? "primary" : "outline"}>
-        {plan.button.text || "Get Started"}
+        {plan.button?.text || "Get Started"}
       </Link>
     </div>
   </div>

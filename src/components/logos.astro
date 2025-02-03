@@ -1,18 +1,22 @@
 ---
 // @ts-ignore
 import { Icon } from "astro-icon/components";
+import Picture from "astro/components/Picture.astro";
+import heroImage from "assets/logos/bokun.avif";
 ---
 
 <div class="mt-24">
-  <h2 class="text-center text-slate-500">Works with your technologies</h2>
+  <h2 class="text-center text-slate-500">
+    Integrate with your workflow in 2025
+  </h2>
   <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
-
-    <Icon class="size-8 md:size-12" name="simple-icons:react" />
-    <Icon class="size-8 md:size-12" name="simple-icons:svelte" />
-    <Icon class="size-8 md:size-12" name="simple-icons:astro" />
-    <Icon class="size-8 md:size-16" name="simple-icons:tailwindcss" />
-    <Icon class="size-8 md:size-16" name="simple-icons:alpinedotjs" />
-    <Icon class="size-8 md:size-12" name="simple-icons:vercel" />
-
+    <Picture
+      src={heroImage}
+      alt="Bokun logo"
+      widths={[100, 200, 400]}
+      sizes="(max-width: 200px) 10vw, 310px"
+      loading="lazy"
+      format="avif"
+    />
   </div>
 </div>

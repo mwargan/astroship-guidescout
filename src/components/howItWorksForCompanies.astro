@@ -1,0 +1,33 @@
+---
+import appHomeCompanies from "assets/appHomeCompanies.jpg";
+
+import Howitworks from "./howitworks.astro";
+
+const { title, description, companyName } = Astro.props;
+
+const steps = [
+  {
+    title: "Create a tour offer",
+    description:
+      "Add details regarding pickups, the type of tour you're offering, and what skills and qualifications you require a guide to have.",
+    icon: "bx:bxs-user-plus",
+  },
+  {
+    title: `Automatically connect with a local qualified guide`,
+    description: `GuideScout automatically pings all guides in the area that meet your criteria. When one accepts your offer, you'll get a notification.`,
+    icon: "bx:bxs-briefcase",
+  },
+  {
+    title: "Run the tour",
+    description: `The guide will come to the office at the time you indicated. Provide them with all materials needed to run the tour, and off they go!`,
+    icon: "bx:bxs-check-circle",
+  },
+];
+---
+
+<Howitworks
+  steps={steps}
+  title={title}
+  description={description}
+  image={appHomeCompanies}
+/>
